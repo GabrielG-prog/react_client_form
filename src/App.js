@@ -1,25 +1,48 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from 'react';
+import Client from './components/Client';
+import ClientForm from './components/ClientForm';
+import Counter from './components/Counter';
 
-function App() {
+const App = () => {
+
+  const [clients, setClients] = useState([
+    {id: 1, nom: "Lior Chamla"},
+    {id: 2, nom: "Magalie Pernin"},
+    {id: 3, nom: "Joseph Durand"},
+  ])
+
+  const handleDelete = idClient => {
+    const clientCopy = [...clients];
+    const indexClientCopy = clientCopy.findIndex(
+      c => c.id === idClient
+    );
+    clientCopy.splice(indexClientCopy, 1);
+    setClients(clientCopy);
+
+  }
+
+  const handleAdd = newClient => {
+    const clientCopy = [...clients];
+    clientCopy.push(newClient);
+    setClients(clientCopy);
+  }
+
+  const title = "Liste des client";
+  const titleSecond = <h2>Ajouter ou supprimer</h2>;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <div>
+      <h1>{title}</h1>
+      <Counter />
+      {titleSecond}
+      <ul>
+        {clients.map(client => 
+          (<Client propClient={client} propDelete={handleDelete} />))}
+      </ul>
+      <ClientForm propAdd={handleAdd}/>
+    </div> 
+  )
+    
 }
 
 export default App;
